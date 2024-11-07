@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Handwritten Digit Recognition</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Handwritten Digit Recognition</h1>
+
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+
+    <form
+      action="{{ url_for('predict') }}"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <label for="file">Upload an image:</label>
+      <input type="file" name="file" id="file" accept="image/*" required />
+      <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction_text %}
+    <h2>{{ prediction_text }}</h2>
+    <div>
+      <h3>Processed Image:</h3>
+      <img
+        src="data:image/png;base64,{{ image_data }}"
+        alt="Processed Image with Bounding Box"
+      />
+    </div>
+    {% endif %}
+
+    <form action="{{ url_for('reset') }}" method="post">
+      <button type="submit">Reset</button>
+    </form>
+  </body>
+</html>
